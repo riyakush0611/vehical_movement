@@ -20,7 +20,7 @@ let pathControl;
 let pathPoints = [];
 
 // Replace 'YOUR_MAPBOX_TOKEN' with an actual token
-const accessKey = 'sk.gsdvRhgngnhmhmmjiwiYSI6ImNsemp4ZTc0MzB0aDIya3IxMXF1NWJvbzgifQ.E4mLxZLZCph58edgsbgdn8ut';
+const accessKey = 'access key';
 
 // Add event listener to display route based on the selected trip
 document.getElementById('draw-route').addEventListener('click', () => {
