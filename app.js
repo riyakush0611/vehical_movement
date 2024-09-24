@@ -14,7 +14,7 @@ const vehicleMarker = L.marker([17.385044, 78.486671], { icon: carIcon }).addTo(
 
 let routeControl;
 let routePoints = [];
-const mapboxAccessToken = 'pk.eyJ1IjoibGlsZXNoIiwiYSI6ImNsemp4ZTc0MzB0aDIya3IxMXF1NWJvbzgifQ.E4mLxZLZCph5ohJB6rtW9w';
+const mapboxAccessToken = 'sk.yrjdnndnrYrvbdlsZXNoIiwiYSI6ImNsemp4ZTc0MzB0aXF1NWJvbzgifQ.E4mLxZLZCph5ohJB6rtW9w';
 
 document.getElementById('show-route').addEventListener('click', () => {
     const tripType = document.getElementById('trip-select').value;
