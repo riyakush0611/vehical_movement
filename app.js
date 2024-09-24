@@ -1,91 +1,100 @@
-const map = L.map('map').setView([17.385044, 78.486671], 13);
+// Initialize the tracking map with a default view
+const trackingMap = L.map('tracker-map').setView([17.385044, 78.486671], 13);
 
+// Add base layer to the map
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-}).addTo(map);
+}).addTo(trackingMap);
 
-const carIcon = L.icon({
-    iconUrl: 'https://th.bing.com/th/id/OIP.0Ijk7_gKShv1aDjiQfxSYAAAAA?w=474&h=484&rs=1&pid=ImgDetMain', // Link to the car image
-    iconSize: [64, 64], // Adjust the size to your preference
-    iconAnchor: [32, 32], // The anchor will center the icon
+// Icon for the vehicle (replace the URL with a suitable image)
+const vehicleImage = L.icon({
+    iconUrl: 'https://th.bing.com/th/id/OIP.0Ijk7_gKShv1aDjiQfxSYAAAAA?w=474&h=484&rs=1',
+    iconSize: [64, 64],
+    iconAnchor: [32, 32],
 });
 
-const vehicleMarker = L.marker([17.385044, 78.486671], { icon: carIcon }).addTo(map);
+// Vehicle marker added to the map
+const movingVehicle = L.marker([17.385044, 78.486671], { icon: vehicleImage }).addTo(trackingMap);
 
-let routeControl;
-let routePoints = [];
-const mapboxAccessToken = 'sk.yrjdnndnrYrvbdlsZXNoIiwiYSI6ImNsemp4ZTc0MzB0aXF1NWJvbzgifQ.E4mLxZLZCph5ohJB6rtW9w';
+let pathControl;
+let pathPoints = [];
 
-document.getElementById('show-route').addEventListener('click', () => {
-    const tripType = document.getElementById('trip-select').value;
-    let start, end;
+// Replace 'YOUR_MAPBOX_TOKEN' with an actual token
+const accessKey = 'pk.eyJ1IjoibGlsZXNoIiwiYSI6ImNsemp4ZTc0MzB0aDIya3IxMXF1NWJvbzgifQ.E4mLxZLZCph5ohJB6rtW9w';
 
-    switch (tripType) {
-        case 'today':
-            start = [17.385044, 78.486671];
-            end = [17.385045, 78.486672];
+// Add event listener to display route based on the selected trip
+document.getElementById('draw-route').addEventListener('click', () => {
+    const selectedJourney = document.getElementById('journey-picker').value;
+    let origin, destination;
+
+    switch (selectedJourney) {
+        case 'current':
+            origin = [17.385044, 78.486671];
+            destination = [17.385045, 78.486672];
             break;
-        case 'yesterday':
-            start = [17.395044, 78.486671];
-            end = [19.395044, 78.486676];
+        case 'previous-day':
+            origin = [17.395044, 78.486671];
+            destination = [19.395044, 78.486676];
             break;
-        case 'last-week':
-            start = [17.515044, 78.486671];
-            end = [20.765044, 81.486671];
+        case 'week-before':
+            origin = [17.515044, 78.486671];
+            destination = [20.765044, 81.486671];
             break;
         default:
-            start = [17.855044, 78.486671];
-            end = [20.925044, 81.486671];
+            origin = [17.855044, 78.486671];
+            destination = [20.925044, 81.486671];
             break;
     }
 
-    if (routeControl) {
-        map.removeControl(routeControl);
+    // Remove the previous path if exists
+    if (pathControl) {
+        trackingMap.removeControl(pathControl);
     }
 
-    routeControl = L.Routing.control({
+    // Create a new routing path on the map
+    pathControl = L.Routing.control({
         waypoints: [
-            L.latLng(start),
-            L.latLng(end)
+            L.latLng(origin),
+            L.latLng(destination)
         ],
-        router: L.Routing.mapbox(mapboxAccessToken),
+        router: L.Routing.mapbox(accessKey),
         routeWhileDragging: true,
         lineOptions: {
-            styles: [{
-                color: 'blue',
-                opacity: 0.8,
-                weight: 5
-            }]
+            styles: [{ color: 'blue', opacity: 0.8, weight: 5 }]
         }
-    }).addTo(map);
+    }).addTo(trackingMap);
 
-    routeControl.on('routesfound', function(e) {
-        routePoints = e.routes[0].coordinates;
+    // Extract route points once path is found
+    pathControl.on('routesfound', function (event) {
+        pathPoints = event.routes[0].coordinates;
     });
 
-    vehicleMarker.setLatLng(start);
-    map.panTo(start);
+    // Set vehicle marker at the starting point
+    movingVehicle.setLatLng(origin);
+    trackingMap.panTo(origin);
 });
 
-document.getElementById('start-movement').addEventListener('click', () => {
-    if (routePoints.length === 0) return;
+// Add event listener to move vehicle along the path
+document.getElementById('activate-movement').addEventListener('click', () => {
+    if (pathPoints.length === 0) return; // No movement if no route points available
 
-    const totalDuration = 10000;
-    const stepTime = totalDuration / routePoints.length;
+    const moveDuration = 10000;
+    const stepInterval = moveDuration / pathPoints.length;
 
-    let index = 0;
+    let pointIndex = 0;
 
-    function move() {
-        if (index < routePoints.length) {
-            const latlng = L.latLng(routePoints[index].lat, routePoints[index].lng);
+    // Function to move vehicle step by step
+    function moveVehicle() {
+        if (pointIndex < pathPoints.length) {
+            const newCoords = L.latLng(pathPoints[pointIndex].lat, pathPoints[pointIndex].lng);
 
-            vehicleMarker.setLatLng(latlng);
-            map.panTo(latlng);
+            movingVehicle.setLatLng(newCoords); // Update vehicle position
+            trackingMap.panTo(newCoords); // Center the map on the moving vehicle
 
-            index++;
-            setTimeout(move, stepTime);
+            pointIndex++;
+            setTimeout(moveVehicle, stepInterval); // Move after a delay
         }
     }
 
-    move();
+    moveVehicle(); // Begin the movement
 });
