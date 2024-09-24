@@ -1,80 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Vehicle Movement</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <title>Live Vehicle Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        @media only screen and (max-width: 600px) {
-            .controls {
+        @media (max-width: 600px) {
+            .panel {
                 bottom: 45vh !important;
             }
         }
-    
-        #map {
+
+        #tracker-map {
             height: 600px;
         }
-    
-        .car-icon {
+
+        .vehicle-icon {
             font-size: 48px;
             color: red;
         }
-    
-        .controls {
+
+        .panel {
             position: absolute;
-            bottom: 20px; /* Adjusted the bottom position to ensure it's not too high or low */
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
+            background: rgba(255, 255, 255, 0.8);
             padding: 10px;
             border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Adds a soft shadow */
-            z-index: 1000; /* Ensures it is on top of the map */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
         }
-    
+
         button {
-            background-color: #007bff; /* Custom blue background */
-            color: white; /* White text */
+            background-color: #007bff;
+            color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            margin-right: 10px; /* Adds space between buttons */
+            margin-right: 10px;
             font-size: 16px;
         }
-    
+
         button:hover {
-            background-color: #0056b3; /* Darker blue when hovered */
+            background-color: #0056b3;
         }
-    
+
         select {
             padding: 8px;
             border-radius: 5px;
             font-size: 16px;
         }
     </style>
-    ``
-    
 </head>
 
 <body>
-    <div id="map"></div>
+    <div id="tracker-map"></div>
 
-    <div class="controls">
-        <select id="trip-select">
-            <option value="today">Today's Trip</option>
-            <option value="yesterday">Yesterday's Trip</option>
-            <option value="last-week">Last Week's Ride</option>
+    <div class="panel">
+        <select id="journey-picker">
+            <option value="current">Current Journey</option>
+            <option value="previous-day">Previous Day's Journey</option>
+            <option value="week-before">Last Week’s Journey</option>
         </select>
-        <button id="show-route">Show Route</button>
-        <button id="start-movement">Start Movement</button>
+        <button id="draw-route">Show Path</button>
+        <button id="activate-movement">Begin Movement</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.js"></script>
-    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
