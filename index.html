@@ -1,17 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
+    <title>Vehicle Movement</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Tracking</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        @media only screen and (max-width: 600px) {
+            .controls {
+                bottom: 45vh !important;
+            }
+        }
+    
+        #map {
+            height: 600px;
+        }
+    
+        .car-icon {
+            font-size: 48px;
+            color: red;
+        }
+    
+        .controls {
+            position: absolute;
+            bottom: 20px; /* Adjusted the bottom position to ensure it's not too high or low */
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Adds a soft shadow */
+            z-index: 1000; /* Ensures it is on top of the map */
+        }
+    
+        button {
+            background-color: #007bff; /* Custom blue background */
+            color: white; /* White text */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px; /* Adds space between buttons */
+            font-size: 16px;
+        }
+    
+        button:hover {
+            background-color: #0056b3; /* Darker blue when hovered */
+        }
+    
+        select {
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+    ``
+    
 </head>
+
 <body>
-    <h1>Vehicle Movement on Map</h1>
-    <button id="startButton">Start</button>
     <div id="map"></div>
+
+    <div class="controls">
+        <select id="trip-select">
+            <option value="today">Today's Trip</option>
+            <option value="yesterday">Yesterday's Trip</option>
+            <option value="last-week">Last Week's Ride</option>
+        </select>
+        <button id="show-route">Show Route</button>
+        <button id="start-movement">Start Movement</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-routing-machine/3.2.12/leaflet-routing-machine.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>
